@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clima onde você está</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>🌤️ Clima onde você está</h1>
+  </header>
+
+  <main>
+    <section>
+      <label for="cidade">Digite o nome da cidade:</label>
+      <input type="text" id="cidade" placeholder="Ex: Recife">
+      <button onclick="buscarClima()">Buscar</button>
+    </section>
+
+    <section>
+      <h2>Resultado:</h2>
+      <p id="resultado">Digite uma cidade e clique em Buscar.</p>
+    </section>
+  </main>
+
+  <script>
+    async function buscarClima() {
+      const cidade = document.getElementById("cidade").value;
+      const resultado = document.getElementById("resultado");
+
+      if (cidade === "") {
+        resultado.textContent = "Por favor, digite o nome de uma cidade.";
+        return;
+      }
+
+      const apiKey ="a18c7942a14d1a171d26d1b3e2cedc06"; // 🔑 Coloque sua chave da API aqui
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${cidade}&appid=${apiKey}&units=metric&lang=pt_br`;
+
+      try {
+        const resposta = await fetch(url);
+        if (!resposta.ok) {
+          throw new Error("Cidade não encontrada");
+        }
+        const dados = await resposta.json();
+        
+        resultado.textContent = `🌎 Cidade: ${dados.name} | 🌡️ Temperatura: ${dados.main.temp}°C | ☁️ Clima: ${dados.weather[0].description}`;
+      } catch (erro) {
+        resultado.textContent = "Erro: " + erro.message;
+      }
+    }
+  </script>
+</body>
+</html>
